@@ -1,0 +1,27 @@
+# Enable rewriting
+RewriteEngine On
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<Files ~ "^.*\.([Ee][Nn][Vv])">
+    Order allow,deny
+    Deny from all
+    Satisfy all
+</Files>
+
+# Prevent access to config files
+<Files "*.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Enable HTTPS redirect
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevent hotlinking
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://(www\.)?empowermoms\.co\.za/.*$ [NC]
+RewriteRule \.(jpg|jpeg|png|gif)$ - [F]
